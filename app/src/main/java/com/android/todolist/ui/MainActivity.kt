@@ -1,20 +1,25 @@
-package com.android.todolist
+package com.android.todolist.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.android.todolist.databinding.ActivityMainBinding
 import com.android.todolist.datasource.TaskDataSource
-import com.android.todolist.ui.AddTaskActivity
-import com.android.todolist.ui.TaskAdapter
+import com.android.todolist.model.Task
+import com.android.todolist.repository.TaskRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var register: ActivityResultLauncher<Intent>
+    private val taskRepository by lazy {
+        TaskRepository(this)
+    }
     private val taskAdapter by lazy {
         TaskAdapter()
     }
@@ -36,26 +41,36 @@ class MainActivity : AppCompatActivity() {
 
         taskAdapter.editListener =  {
             val intent = Intent(this, AddTaskActivity::class.java)
-            intent.putExtra(TASK_ID, it.id)
+            intent.putExtra(TASK, it)
             register.launch(intent)
         }
 
         taskAdapter.deleteListener = {
-            TaskDataSource.deleteTask(it)
-            updateList()
+            runBlocking {
+                taskRepository.deleteTask(listOf(it))
+                runOnUiThread {
+                    updateList()
+                }
+            }
         }
     }
 
     private fun updateList() {
-        val list = TaskDataSource.getList()
-        Toast.makeText(this, list.toString(), Toast.LENGTH_SHORT).show()
-        taskAdapter.submitList(list)
-        binding.ltEmptyState.emptyStateRoot.visibility =
-            if(list.isEmpty())
-                View.VISIBLE
-            else
-                View.GONE
+        var list: List<Task>
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                list = taskRepository.getTasks()
+            }
+            runOnUiThread {
+                taskAdapter.submitList(list)
+                binding.ltEmptyState.emptyStateRoot.visibility =
+                    if(list.isEmpty())
+                        View.VISIBLE
+                    else
+                        View.GONE
 
+            }
+        }
     }
 
     private fun insertRegister() {
@@ -76,11 +91,7 @@ class MainActivity : AppCompatActivity() {
         const val CREATE_NEW_TASK = 1
         const val EDIT_TASK = 2
         const val RESULT = "result"
-        const val TASK_ID = "id"
+        const val TASK = "task"
     }
 
-    fun showList(view: View) {
-        Toast.makeText(this, TaskDataSource.getList().toString(), Toast.LENGTH_SHORT).show()
-        updateList()
-    }
 }

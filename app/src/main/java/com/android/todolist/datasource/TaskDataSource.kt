@@ -1,7 +1,6 @@
 package com.android.todolist.datasource
 
 import com.android.todolist.model.Task
-import java.util.*
 
 object TaskDataSource {
 

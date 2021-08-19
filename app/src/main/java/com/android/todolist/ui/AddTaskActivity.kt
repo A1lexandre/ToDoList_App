@@ -2,27 +2,32 @@ package com.android.todolist.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.android.todolist.MainActivity
-import com.android.todolist.MainActivity.Companion.CREATE_NEW_TASK
-import com.android.todolist.MainActivity.Companion.EDIT_TASK
-import com.android.todolist.MainActivity.Companion.RESULT
-import com.android.todolist.MainActivity.Companion.TASK_ID
+import com.android.todolist.R
+import com.android.todolist.ui.MainActivity.Companion.CREATE_NEW_TASK
+import com.android.todolist.ui.MainActivity.Companion.EDIT_TASK
+import com.android.todolist.ui.MainActivity.Companion.RESULT
 import com.android.todolist.databinding.ActivityNewTaskBinding
-import com.android.todolist.datasource.TaskDataSource
 import com.android.todolist.format
 import com.android.todolist.model.Task
+import com.android.todolist.repository.TaskRepository
 import com.android.todolist.text
+import com.android.todolist.ui.MainActivity.Companion.TASK
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class AddTaskActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewTaskBinding
-    private var task_id: Int = 0
+    private val taskRepository by lazy {
+        TaskRepository(this)
+    }
+    private var task: Task? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +35,11 @@ class AddTaskActivity : AppCompatActivity() {
         setContentView(binding.root)
         insertListeners()
 
-        task_id = intent.getIntExtra(TASK_ID, 0)
-        if(task_id != 0)
-            populateForm()
+        task = intent.getParcelableExtra(TASK)
+        task?.let {
+            populateForm(it)
+            binding.btnSaveTask.text = getString(R.string.save_task_label)
+        }
     }
 
     private fun insertListeners() {
@@ -63,17 +70,32 @@ class AddTaskActivity : AppCompatActivity() {
         }
 
         binding.btnSaveTask.setOnClickListener {
-            TaskDataSource.addTask(
-                Task(
-                    title = binding.tilTitle.text,
-                    description = binding.tilDescription.text,
-                    date = binding.tilDate.text,
-                    time = binding.tilTime.text,
-                    id = task_id
-                )
-            )
+            runBlocking {
+                withContext(Dispatchers.IO) {
+                    if(task == null)
+                        taskRepository.addTask(
+                            Task(
+                                title = binding.tilTitle.text,
+                                description = binding.tilDescription.text,
+                                date = binding.tilDate.text,
+                                time = binding.tilTime.text
+                            )
+                        )
+                    else
+                        taskRepository.updateTask(
+                            Task(
+                                title = binding.tilTitle.text,
+                                description = binding.tilDescription.text,
+                                date = binding.tilDate.text,
+                                time = binding.tilTime.text,
+                                id = task?.id ?: 0
+                            )
+                        )
+                }
+            }
+
             Intent().apply {
-                if(task_id == 0)
+                if(task == null)
                     putExtra(RESULT, CREATE_NEW_TASK)
                 else
                     putExtra(RESULT, EDIT_TASK)
@@ -84,12 +106,10 @@ class AddTaskActivity : AppCompatActivity() {
         }
     }
 
-    private fun populateForm() {
-        TaskDataSource.findbyId(task_id)?.let {
-            binding.tilTitle.text = it.title
-            binding.tilDescription.text = it.description
-            binding.tilDate.text = it.date
-            binding.tilTime.text = it.time
-        }
+    private fun populateForm(task: Task) {
+            binding.tilTitle.text = task.title
+            binding.tilDescription.text = task.description
+            binding.tilDate.text = task.date
+            binding.tilTime.text = task.time
     }
 }

@@ -10,4 +10,5 @@
     <string name="delete_label">Excluir</string>
     <string name="tasks_label">Tarefas</string>
     <string name="label_empty_state">Oops! Você não possui\nnenhuma tarefa.</string>
+    <string name="save_task_label">Salvar farefa</string>
 </resources>
