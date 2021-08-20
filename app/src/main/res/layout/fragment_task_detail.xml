@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/title_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/title_label"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_ttitle"
+        android:layout_marginStart="80dp"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_ttitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Passear"
+        android:textStyle="italic"
+        android:textSize="32sp"
+        app:layout_constraintTop_toBottomOf="@id/title_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/desc_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/description_label"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_ttitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="80dp"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_tdesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Passear"
+        android:textStyle="italic"
+        android:textSize="32sp"
+        app:layout_constraintTop_toBottomOf="@id/desc_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/date_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/date_label"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_tdesc"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="80dp"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_tdate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Passear"
+        android:textStyle="italic"
+        android:textSize="32sp"
+        app:layout_constraintTop_toBottomOf="@id/date_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/time_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/hour_label"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_tdate"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="80dp"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_ttime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Passear"
+        android:textStyle="italic"
+        android:textSize="32sp"
+        app:layout_constraintTop_toBottomOf="@id/time_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

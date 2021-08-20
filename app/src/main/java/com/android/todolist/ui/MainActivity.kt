@@ -7,7 +7,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.android.todolist.databinding.ActivityMainBinding
-import com.android.todolist.datasource.TaskDataSource
+import com.android.todolist.databinding.FragmentTaskDetailBinding
 import com.android.todolist.model.Task
 import com.android.todolist.repository.TaskRepository
 import kotlinx.coroutines.Dispatchers
@@ -52,6 +52,14 @@ class MainActivity : AppCompatActivity() {
                     updateList()
                 }
             }
+        }
+
+        taskAdapter.showTaskDetailClick = {
+            val fragment = TaskDetailFragment()
+            fragment.arguments = Bundle().apply {
+                putParcelable(TASK, it)
+            }
+            fragment.show(supportFragmentManager, null)
         }
     }
 

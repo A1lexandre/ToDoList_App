@@ -104,6 +104,10 @@ class AddTaskActivity : AppCompatActivity() {
 
             finish()
         }
+
+        binding.tlTitle.setNavigationOnClickListener {
+            finish()
+        }
     }
 
     private fun populateForm(task: Task) {

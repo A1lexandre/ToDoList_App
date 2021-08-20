@@ -14,6 +14,7 @@ class TaskAdapter: ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback())
 
     var editListener: (Task) -> Unit = {}
     var deleteListener: (Task) -> Unit = {}
+    var showTaskDetailClick: (Task) -> Unit = {}
 
     inner class TaskViewHolder(private val binding: TaskListItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
@@ -22,6 +23,9 @@ class TaskAdapter: ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback())
                 binding.tvTaskTime.text = "${it.date} ${it.time}"
                 binding.manageTaskMenu.setOnClickListener {
                     showPopup(task)
+                }
+                binding.root.setOnClickListener {
+                    showTaskDetailClick(task)
                 }
             }
         }
